@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -81,18 +81,53 @@
                             ];
                             var material = new THREE.MeshFaceMaterial(cubeMaterials);
                             var robot = new THREE.Mesh(geometry, material);
+
                             robot.position.y = 0.15;
 
+
+                            //MTL loader voor de textures
+                            var mtlLoader = new THREE.MTLLoader();
+                            mtlLoader.setTexturePath('obj/');
+                            mtlLoader.setPath('obj/');
+                            mtlLoader.load('materials.mtl', function (materials) {
+
+                                materials.preload();
+
+                                //de objloader die het object inlaadt
+                                var objLoader = new THREE.OBJLoader();
+                                objLoader.setMaterials(materials);
+                                objLoader.setPath('obj/');
+                                objLoader.load('model.obj', function (object) {
+
+                                    group.add(object);
+                                    object.position.y = 1;
+                                    object.position.x = 20;
+                                    object.scale.x = 2;
+                                    object.scale.y = 2;
+                                    object.scale.y = 2;
+
+                                });
+
+                            });
+
+                            //toevoegen aan groep en aan de scene
                             var group = new THREE.Group();
                             group.add(robot);
 
+                            //het object toevoegen aan de groep
+                            group.add(object)
+                            //de groep toevoegen aan de scene zodat je hem kunt zien
                             scene.add(group);
                             worldObjects[command.parameters.guid] = group;
+
+
+
                         }
                     }
 
                     var object = worldObjects[command.parameters.guid];
 
+                    //Dit is voor het verplaatsen van de robot op basis van commando's van de server.
                     object.position.x = command.parameters.x;
                     object.position.y = command.parameters.y;
                     object.position.z = command.parameters.z;
@@ -109,6 +144,11 @@
     </script>
 
     <script src="three.min.js"></script>
+    <script src="OBJLoader.js"></script>
+    <script src="MTLLoader.js"></script>
+
+
+
     <script src="OrbitControls.js"></script>
 </body>
 
