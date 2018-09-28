@@ -31,3 +31,14 @@ C:\Users\Jan\Source\Repos\Graphics1VisualStudio\AmazonSimulator VS\obj\Debug\net
 C:\Users\Jan\Source\Repos\Graphics1VisualStudio\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.AssemblyInfo.cs
 C:\Users\Jan\Source\Repos\Graphics1VisualStudio\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.dll
 C:\Users\Jan\Source\Repos\Graphics1VisualStudio\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.pdb
+D:\git\git\GraphicsOpdracht1\AmazonSimulator VS\bin\Debug\netcoreapp2.0\AmazonSimulator VS.deps.json
+D:\git\git\GraphicsOpdracht1\AmazonSimulator VS\bin\Debug\netcoreapp2.0\AmazonSimulator VS.runtimeconfig.json
+D:\git\git\GraphicsOpdracht1\AmazonSimulator VS\bin\Debug\netcoreapp2.0\AmazonSimulator VS.runtimeconfig.dev.json
+D:\git\git\GraphicsOpdracht1\AmazonSimulator VS\bin\Debug\netcoreapp2.0\AmazonSimulator VS.dll
+D:\git\git\GraphicsOpdracht1\AmazonSimulator VS\bin\Debug\netcoreapp2.0\AmazonSimulator VS.pdb
+D:\git\git\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.csprojAssemblyReference.cache
+D:\git\git\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.csproj.CoreCompileInputs.cache
+D:\git\git\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.AssemblyInfoInputs.cache
+D:\git\git\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.AssemblyInfo.cs
+D:\git\git\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.dll
+D:\git\git\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.pdb

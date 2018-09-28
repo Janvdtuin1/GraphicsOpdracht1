@@ -84,20 +84,23 @@
 
                             robot.position.y = 0.15;
 
+                            function test(mtl, obj) {
 
+                                
+                                
                             //MTL loader voor de textures
                             var mtlLoader = new THREE.MTLLoader();
                             mtlLoader.setTexturePath('obj/');
-                            mtlLoader.setPath('obj/');
-                            mtlLoader.load('materials.mtl', function (materials) {
+                                mtlLoader.setPath('obj/');
+                                mtlLoader.load(mtl, function (materials) {
 
                                 materials.preload();
 
                                 //de objloader die het object inlaadt
                                 var objLoader = new THREE.OBJLoader();
                                 objLoader.setMaterials(materials);
-                                objLoader.setPath('obj/');
-                                objLoader.load('model.obj', function (object) {
+                                    objLoader.setPath('obj/');
+                                    objLoader.load(obj, function (object) {
 
                                     group.add(object);
                                     object.position.y = 1;
@@ -108,7 +111,10 @@
 
                                 });
 
-                            });
+                                });
+                            }
+
+                            test('materials.mtl', 'model.obj');
 
                             //toevoegen aan groep en aan de scene
                             var group = new THREE.Group();
