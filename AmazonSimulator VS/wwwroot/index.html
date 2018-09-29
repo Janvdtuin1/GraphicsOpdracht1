@@ -84,11 +84,8 @@
 
                             robot.position.y = 0.15;
 
-                            function test(mtl, obj) {
-
-                                
-                                
-                            //MTL loader voor de textures
+                            function spawn(mtl, obj) {
+                           //MTL loader voor de textures
                             var mtlLoader = new THREE.MTLLoader();
                             mtlLoader.setTexturePath('obj/');
                                 mtlLoader.setPath('obj/');
@@ -102,19 +99,17 @@
                                     objLoader.setPath('obj/');
                                     objLoader.load(obj, function (object) {
 
-                                    group.add(object);
-                                    object.position.y = 1;
-                                    object.position.x = 20;
-                                    object.scale.x = 2;
-                                    object.scale.y = 2;
-                                    object.scale.y = 2;
-
+                                    group.add(object);  
                                 });
-
                                 });
                             }
 
-                            test('materials.mtl', 'model.obj');
+                            
+
+                            TruckObj = { "mtl": "materials.mtl", "obj": "model.obj" };
+                            spawn(TruckObj.mtl, TruckObj.obj);
+                            
+
 
                             //toevoegen aan groep en aan de scene
                             var group = new THREE.Group();
