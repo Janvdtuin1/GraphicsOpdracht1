@@ -42,3 +42,14 @@ D:\git\git\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSi
 D:\git\git\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.AssemblyInfo.cs
 D:\git\git\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.dll
 D:\git\git\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.pdb
+C:\Users\Jan\Documents\GitHub\GraphicsOpdracht1\AmazonSimulator VS\bin\Debug\netcoreapp2.0\AmazonSimulator VS.deps.json
+C:\Users\Jan\Documents\GitHub\GraphicsOpdracht1\AmazonSimulator VS\bin\Debug\netcoreapp2.0\AmazonSimulator VS.runtimeconfig.json
+C:\Users\Jan\Documents\GitHub\GraphicsOpdracht1\AmazonSimulator VS\bin\Debug\netcoreapp2.0\AmazonSimulator VS.runtimeconfig.dev.json
+C:\Users\Jan\Documents\GitHub\GraphicsOpdracht1\AmazonSimulator VS\bin\Debug\netcoreapp2.0\AmazonSimulator VS.dll
+C:\Users\Jan\Documents\GitHub\GraphicsOpdracht1\AmazonSimulator VS\bin\Debug\netcoreapp2.0\AmazonSimulator VS.pdb
+C:\Users\Jan\Documents\GitHub\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.csprojAssemblyReference.cache
+C:\Users\Jan\Documents\GitHub\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.csproj.CoreCompileInputs.cache
+C:\Users\Jan\Documents\GitHub\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.AssemblyInfoInputs.cache
+C:\Users\Jan\Documents\GitHub\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.AssemblyInfo.cs
+C:\Users\Jan\Documents\GitHub\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.dll
+C:\Users\Jan\Documents\GitHub\GraphicsOpdracht1\AmazonSimulator VS\obj\Debug\netcoreapp2.0\AmazonSimulator VS.pdb
