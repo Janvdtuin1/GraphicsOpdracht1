@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -37,10 +37,9 @@
                 document.body.appendChild(renderer.domElement);
 
                 window.addEventListener('resize', onWindowResize, false);
-           
 
                 var geometry = new THREE.PlaneGeometry(30, 30, 32);
-                var material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/vloer.jpg"), side: THREE.DoubleSide });
+                var material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
                 var plane = new THREE.Mesh(geometry, material);
                 plane.rotation.x = Math.PI / 2.0;
                 plane.position.x = 15;
@@ -82,54 +81,18 @@
                             ];
                             var material = new THREE.MeshFaceMaterial(cubeMaterials);
                             var robot = new THREE.Mesh(geometry, material);
-
                             robot.position.y = 0.15;
 
-                            function spawn(mtl, obj) {
-                           //MTL loader voor de textures
-                            var mtlLoader = new THREE.MTLLoader();
-                            mtlLoader.setTexturePath('obj/');
-                                mtlLoader.setPath('obj/');
-                                mtlLoader.load(mtl, function (materials) {
-
-                                materials.preload();
-
-                                //de objloader die het object inlaadt
-                                var objLoader = new THREE.OBJLoader();
-                                objLoader.setMaterials(materials);
-                                    objLoader.setPath('obj/');
-                                    objLoader.load(obj, function (object) {
-
-                                    group.add(object);  
-                                });
-                                });
-                            }
-
-                            
-
-                            TruckObj = { "mtl": "materials.mtl", "obj": "model.obj" };
-                            spawn(TruckObj.mtl, TruckObj.obj);
-                            
-
-
-                            //toevoegen aan groep en aan de scene
                             var group = new THREE.Group();
                             group.add(robot);
 
-                            //het object toevoegen aan de groep
-                            group.add(object)
-                            //de groep toevoegen aan de scene zodat je hem kunt zien
                             scene.add(group);
                             worldObjects[command.parameters.guid] = group;
-
-
-
                         }
                     }
 
                     var object = worldObjects[command.parameters.guid];
 
-                    //Dit is voor het verplaatsen van de robot op basis van commando's van de server.
                     object.position.x = command.parameters.x;
                     object.position.y = command.parameters.y;
                     object.position.z = command.parameters.z;
@@ -146,11 +109,6 @@
     </script>
 
     <script src="three.min.js"></script>
-    <script src="OBJLoader.js"></script>
-    <script src="MTLLoader.js"></script>
-
-
-
     <script src="OrbitControls.js"></script>
 </body>
 
