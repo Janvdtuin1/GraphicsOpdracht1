@@ -57,11 +57,13 @@
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }
-
+            var robot = 0;
             function animate() {
                 requestAnimationFrame(animate);
                 cameraControls.update();
                 renderer.render(scene, camera);
+                robot.position.y += 0.15;
+
             }
 
             exampleSocket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/connect_client");
@@ -71,6 +73,11 @@
                 if (command.command == "update") {
                     if (Object.keys(worldObjects).indexOf(command.parameters.guid) < 0) {
                         if (command.parameters.type == "robot") {
+                           
+                            var skybox = new THREE.SphereGeometry(1000, 32,32);
+                            var skyboxmaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/360.jpg"), side: THREE.DoubleSide });
+                            var skyboxsphere = new THREE.Mesh(skybox, skyboxmaterial);
+
                             var geometry = new THREE.BoxGeometry(0.9, 0.3, 0.9);
                             var cubeMaterials = [
                                 new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_side.png"), side: THREE.DoubleSide }), //LEFT
@@ -79,25 +86,32 @@
                                 new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_bottom.png"), side: THREE.DoubleSide }), //BOTTOM
                                 new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_front.png"), side: THREE.DoubleSide }), //FRONT
                                 new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_front.png"), side: THREE.DoubleSide }), //BACK
+
                             ];
                             var material = new THREE.MeshFaceMaterial(cubeMaterials);
-                            var robot = new THREE.Mesh(geometry, material);
-                            robot.position.y = 0.15;
+
+                        
+
+                            robot = new THREE.Mesh(geometry, material);
+                            //robot.position.y = 0.15;
 
                             var group = new THREE.Group();
                             group.add(robot);
-
+                            scene.add(skyboxsphere);
                             scene.add(group);
                             worldObjects[command.parameters.guid] = group;
                         }
                     }
 
                     var object = worldObjects[command.parameters.guid];
+                    console.log("erer");
+                    console.log(command.parameters.z);
 
                     object.position.x = command.parameters.x;
                     object.position.y = command.parameters.y;
                     object.position.z = command.parameters.z;
 
+ 
                     object.rotation.x = command.parameters.rotationX;
                     object.rotation.y = command.parameters.rotationY;
                     object.rotation.z = command.parameters.rotationZ;
