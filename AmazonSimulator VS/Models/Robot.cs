@@ -82,19 +82,24 @@ namespace Models {
         }
         public virtual void Moving()
         {
-           
+
             if (isMoving)
             {
-                if (x == targetX)
+                Console.WriteLine(x);
+                Console.WriteLine(targetX);
+                Console.WriteLine(isMoving);
+                if (!(Convert.ToInt16(x) == Convert.ToInt16(targetX)))
                 {
-                    isMoving = false;
+                    _x += speed;
+                    Console.WriteLine("testc");
                     
                 }
-                else if (x != targetX)
+
+                else
                 {
-                    _x = x + speed;
+                    isMoving = false;
+                    needsUpdate = false;
                 }
-                
             }
         }
     }

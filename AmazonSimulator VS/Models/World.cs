@@ -16,7 +16,7 @@ namespace Models {
             Robot d = CreateRobot(4, 0, 0);
             Robot e = CreateRobot(5, 0, 0);
             Robot f = CreateRobot(6, 0, 0);
-            a.Changedes(15, 0, 0);
+            a.Changedes(20, 0, 0);
             b.Move(15, 0, 0);
         }
 
