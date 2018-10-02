@@ -10,8 +10,14 @@ namespace Models {
         private List<IObserver<Command>> observers = new List<IObserver<Command>>();
         
         public World() {
-            Robot r = CreateRobot(0,0,0);
-            r.Move(4.6, 0, 13);
+            Robot a = CreateRobot(1, 0, 0);
+            Robot b = CreateRobot(0, 0, 0);
+            Robot c = CreateRobot(3, 0, 0);
+            Robot d = CreateRobot(4, 0, 0);
+            Robot e = CreateRobot(5, 0, 0);
+            Robot f = CreateRobot(6, 0, 0);
+            a.Changedes(15, 0, 0);
+            b.Move(15, 0, 0);
         }
 
         private Robot CreateRobot(double x, double y, double z) {
@@ -41,9 +47,12 @@ namespace Models {
                 obs.OnNext(new UpdateModel3DCommand(m3d));
             }
         }
-
+        
         public bool Update(int tick)
         {
+            
+            
+            
             for(int i = 0; i < worldObjects.Count; i++) {
                 Robot u = worldObjects[i];
 

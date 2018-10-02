@@ -11,6 +11,9 @@ namespace Models {
         private double _rX = 0;
         private double _rY = 0;
         private double _rZ = 0;
+        private double _tx = 0;
+        private double _ty = 0;
+        private double _tz = 0;
 
         public string type { get; }
         public Guid guid { get; }
@@ -20,6 +23,14 @@ namespace Models {
         public double rotationX { get { return _rX; } }
         public double rotationY { get { return _rY; } }
         public double rotationZ { get { return _rZ; } }
+
+        public double targetX { get { return _tx; } }
+        public double targetY { get { return _ty; } }
+        public double targetZ { get { return _tz; } }
+
+        bool destinationreached = true;
+        bool isMoving = false;
+        public double speed = 0.10;
 
         public bool needsUpdate = true;
 
@@ -41,7 +52,7 @@ namespace Models {
             this._y = y;
             this._z = z;
 
-            needsUpdate = true;
+            needsUpdate = false;
         }
 
         public virtual void Rotate(double rotationX, double rotationY, double rotationZ) {
@@ -49,16 +60,42 @@ namespace Models {
             this._rY = rotationY;
             this._rZ = rotationZ;
 
-            needsUpdate = true;
+            needsUpdate = false;
         }
 
         public virtual bool Update(int tick)
         {
             if(needsUpdate) {
-                needsUpdate = false;
+                Moving();                
                 return true;
             }
             return false;
+        }
+
+        public virtual void Changedes(double xdes, double ydes, double zdes)
+        {
+            this._tx = xdes;
+            this._ty = ydes;
+            this._tz = zdes;
+            isMoving = true;
+            needsUpdate = true;
+        }
+        public virtual void Moving()
+        {
+           
+            if (isMoving)
+            {
+                if (x == targetX)
+                {
+                    isMoving = false;
+                    
+                }
+                else if (x != targetX)
+                {
+                    _x = x + speed;
+                }
+                
+            }
         }
     }
 }
