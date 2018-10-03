@@ -92,7 +92,7 @@
                             worldObjects[command.parameters.guid] = group;
                         } //if Robot
 
-                        if (command.parameters.type == "robot") {
+                        if (command.parameters.type == "shelf") {
                             //stelling
                             var stellingbox = new THREE.BoxGeometry(0.9, 4, 0.9);
                             var stellingtexture = [
@@ -109,8 +109,7 @@
                             var stellingmateriaal = new THREE.MeshFaceMaterial(stellingtexture);
                             var stelling = new THREE.Mesh(stellingbox, stellingtexture);
 
-                            stelling.position.y = 2.1;
-                            stelling.position.z = 5;
+                            console.log(stelling.position.y);
                             group.add(stelling);
 
 
@@ -136,6 +135,7 @@
                     object.rotation.x = command.parameters.rotationX;
                     object.rotation.y = command.parameters.rotationY;
                     object.rotation.z = command.parameters.rotationZ;
+
                 }
             }
 

@@ -6,8 +6,7 @@ using Controllers;
 namespace Models {
     public class World : IObservable<Command>, IUpdatable
     {
-        private List<Robot> worldObjects = new List<Robot>();
-        private List<Shelf> shelfObject = new List<Shelf>();
+        private List<Object> worldObjects = new List<Object>();
 
         private List<IObserver<Command>> observers = new List<IObserver<Command>>();
         
@@ -19,9 +18,10 @@ namespace Models {
             Robot e = CreateRobot(5, 0, 0);
             Robot f = CreateRobot(6, 0, 0);
 
-            Shelf ab = CreateShelf(7, 0, 2);
+            Shelf ab = CreateShelf(10, 10, 3);
             a.Changedes(20, 0, 0);
             b.Move(15, 0, 0);
+
 
         }
 
@@ -33,8 +33,8 @@ namespace Models {
 
         private Shelf CreateShelf(double x, double y, double z)
         {
-            Shelf s = new Shelf(x, y, z, 0, 0, 0);
-            shelfObject.Add(s);
+            Shelf s = new Shelf(x, y, z, 2, 3, 4);
+            worldObjects.Add(s);
             return s;
 
 
@@ -57,7 +57,7 @@ namespace Models {
         }
 
         private void SendCreationCommandsToObserver(IObserver<Command> obs) {
-            foreach(Robot m3d in worldObjects) {
+            foreach(Object m3d in worldObjects) {
                 obs.OnNext(new UpdateModel3DCommand(m3d));
             }
 
@@ -65,13 +65,9 @@ namespace Models {
         }
         
         public bool Update(int tick)
-        {
-            
-            
-            
+        {        
             for(int i = 0; i < worldObjects.Count; i++) {
-                Robot u = worldObjects[i];
-
+                Object u = worldObjects[i];
                 if(u is IUpdatable) {
                     bool needsCommand = ((IUpdatable)u).Update(tick);
 
@@ -79,7 +75,7 @@ namespace Models {
                         SendCommandToObservers(new UpdateModel3DCommand(u));
                     }
                 }
-            }
+            }            
 
             return true;
         }
