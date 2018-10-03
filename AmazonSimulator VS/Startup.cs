@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Views;
+using AmazonSimulator_VS;
 
 namespace AmazonSimulator_VS
 {
