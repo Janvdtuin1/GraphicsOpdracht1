@@ -7,6 +7,8 @@ namespace Models {
     public class World : IObservable<Command>, IUpdatable
     {
         private List<Robot> worldObjects = new List<Robot>();
+        private List<Shelf> shelfObject = new List<Shelf>();
+
         private List<IObserver<Command>> observers = new List<IObserver<Command>>();
         
         public World() {
@@ -16,14 +18,26 @@ namespace Models {
             Robot d = CreateRobot(4, 0, 0);
             Robot e = CreateRobot(5, 0, 0);
             Robot f = CreateRobot(6, 0, 0);
+
+            Shelf ab = CreateShelf(7, 0, 2);
             a.Changedes(20, 0, 0);
             b.Move(15, 0, 0);
+
         }
 
         private Robot CreateRobot(double x, double y, double z) {
             Robot r = new Robot(x,y,z,0,0,0);
             worldObjects.Add(r);
             return r;
+        }
+
+        private Shelf CreateShelf(double x, double y, double z)
+        {
+            Shelf s = new Shelf(x, y, z, 0, 0, 0);
+            shelfObject.Add(s);
+            return s;
+
+
         }
 
         public IDisposable Subscribe(IObserver<Command> observer)
@@ -46,6 +60,8 @@ namespace Models {
             foreach(Robot m3d in worldObjects) {
                 obs.OnNext(new UpdateModel3DCommand(m3d));
             }
+
+            
         }
         
         public bool Update(int tick)

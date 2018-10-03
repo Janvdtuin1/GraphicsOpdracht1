@@ -67,7 +67,7 @@
             exampleSocket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/connect_client");
             exampleSocket.onmessage = function (event) {
                 var command = parseCommand(event.data);
-
+                var group = new THREE.Group();
                 if (command.command == "update") {
                     if (Object.keys(worldObjects).indexOf(command.parameters.guid) < 0) {
                         if (command.parameters.type == "robot") {
@@ -84,6 +84,15 @@
                             var robot = new THREE.Mesh(geometry, material);
                             robot.position.y = 0.15;
 
+                           
+                            
+                            group.add(robot);
+                           
+
+                            worldObjects[command.parameters.guid] = group;
+                        } //if Robot
+
+                        if (command.parameters.type == "robot") {
                             //stelling
                             var stellingbox = new THREE.BoxGeometry(0.9, 4, 0.9);
                             var stellingtexture = [
@@ -101,14 +110,21 @@
                             var stelling = new THREE.Mesh(stellingbox, stellingtexture);
 
                             stelling.position.y = 2.1;
-                            stelling.position.z= 5;
-                            var group = new THREE.Group();
-                            group.add(robot);
+                            stelling.position.z = 5;
                             group.add(stelling);
 
-                            scene.add(group);
-                            worldObjects[command.parameters.guid] = group;
-                        }
+
+
+
+
+
+
+
+
+
+                        } //einde shelf
+                        scene.add(group);
+
                     }
 
                     var object = worldObjects[command.parameters.guid];
