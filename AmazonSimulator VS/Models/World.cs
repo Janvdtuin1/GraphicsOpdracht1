@@ -33,7 +33,7 @@ namespace Models {
 
         private Shelf CreateShelf(double x, double y, double z)
         {
-            Shelf s = new Shelf(x, y, z, 2, 3, 4);
+            Shelf s = new Shelf(x, y, z);
             worldObjects.Add(s);
             return s;
 

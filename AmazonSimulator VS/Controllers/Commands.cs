@@ -14,12 +14,14 @@ namespace Controllers {
         public Command(string type, Object parameters) {
             this.type = type;
             this.parameters = parameters;
+            Console.WriteLine(type + "" + parameters);
         }
 
         public string ToJson() {
             return JsonConvert.SerializeObject(new {
                 command = type,
                 parameters = parameters
+
             });
         }
     }

@@ -10,33 +10,17 @@ namespace Models
         private double _x = 0;
         private double _y = 0;
         private double _z = 0;
-        private double _rX = 0;
-        private double _rY = 0;
-        private double _rZ = 0;
-        private double _tx = 0;
-        private double _ty = 0;
-        private double _tz = 0;
+      
 
         public string type { get; }
         public Guid guid { get; }
         public double x { get { return _x; } }
         public double y { get { return _y; } }
         public double z { get { return _z; } }
-        public double rotationX { get { return _rX; } }
-        public double rotationY { get { return _rY; } }
-        public double rotationZ { get { return _rZ; } }
-
-        public double targetX { get { return _tx; } }
-        public double targetY { get { return _ty; } }
-        public double targetZ { get { return _tz; } }
-
-        bool destinationreached = true;
-        bool isMoving = false;
-        public double speed = 0.10;
 
         public bool needsUpdate = true;
 
-        public Shelf(double x, double y, double z, double rotationX, double rotationY, double rotationZ)
+        public Shelf(double x, double y, double z)
         {
             this.type = "shelf";
             this.guid = Guid.NewGuid();
@@ -45,9 +29,6 @@ namespace Models
             this._y = y;
             this._z = z;
 
-            this._rX = rotationX;
-            this._rY = rotationY;
-            this._rZ = rotationZ;
         }
 
         public virtual void Move(double x, double y, double z)
@@ -56,57 +37,21 @@ namespace Models
             this._y = y;
             this._z = z;
 
-            needsUpdate = false;
+            needsUpdate = true;
         }
 
-        public virtual void Rotate(double rotationX, double rotationY, double rotationZ)
-        {
-            this._rX = rotationX;
-            this._rY = rotationY;
-            this._rZ = rotationZ;
 
-            needsUpdate = false;
-        }
 
         public virtual bool Update(int tick)
         {
             if (needsUpdate)
             {
-                Moving();
+                needsUpdate = false;
                 return true;
             }
             return false;
         }
 
-        public virtual void Changedes(double xdes, double ydes, double zdes)
-        {
-            this._tx = xdes;
-            this._ty = ydes;
-            this._tz = zdes;
-            isMoving = true;
-            needsUpdate = true;
-        }
-        public virtual void Moving()
-        {
-
-            if (isMoving)
-            {
-                Console.WriteLine(x);
-                Console.WriteLine(targetX);
-                Console.WriteLine(isMoving);
-                if (!(Convert.ToInt16(x) == Convert.ToInt16(targetX)))
-                {
-                    _x += speed;
-                    Console.WriteLine("testc");
-
-                }
-
-                else
-                {
-                    isMoving = false;
-                    needsUpdate = false;
-                }
-            }
-        }
+       
     }
 }

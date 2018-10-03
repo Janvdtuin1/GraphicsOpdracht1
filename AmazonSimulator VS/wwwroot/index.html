@@ -92,7 +92,7 @@
                             worldObjects[command.parameters.guid] = group;
                         } //if Robot
 
-                        if (command.parameters.type == "shelf") {
+                        else if (command.parameters.type == "shelf") {
                             //stelling
                             var stellingbox = new THREE.BoxGeometry(0.9, 4, 0.9);
                             var stellingtexture = [
@@ -107,10 +107,10 @@
                             ];
 
                             var stellingmateriaal = new THREE.MeshFaceMaterial(stellingtexture);
-                            var stelling = new THREE.Mesh(stellingbox, stellingtexture);
+                            var shelf = new THREE.Mesh(stellingbox, stellingtexture);
 
-                            console.log(stelling.position.y);
-                            group.add(stelling);
+                            console.log(shelf.position.y);
+                            group.add(shelf);
 
 
 
