@@ -67,9 +67,10 @@
             exampleSocket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/connect_client");
             exampleSocket.onmessage = function (event) {
                 var command = parseCommand(event.data);
-                var group = new THREE.Group();
+                
                 if (command.command == "update") {
                     if (Object.keys(worldObjects).indexOf(command.parameters.guid) < 0) {
+
                         if (command.parameters.type == "robot") {
                             var geometry = new THREE.BoxGeometry(0.9, 0.3, 0.9);
                             var cubeMaterials = [
@@ -85,9 +86,9 @@
                             robot.position.y = 0.15;
 
                            
-                            
+                            var group = new THREE.Group();
                             group.add(robot);
-                           
+                            
 
                             worldObjects[command.parameters.guid] = group;
                         } //if Robot
@@ -107,34 +108,31 @@
                             ];
 
                             var stellingmateriaal = new THREE.MeshFaceMaterial(stellingtexture);
-                            var shelf = new THREE.Mesh(stellingbox, stellingtexture);
+                            var shelf = new THREE.Mesh(stellingbox, stellingmateriaal);
 
                             console.log(shelf.position.y);
+                            var group = new THREE.Group();
+                            
                             group.add(shelf);
-
-
-
-
-
-
-
-
-
-
+                            
+                            worldObjects[command.parameters.guid] = group;
+                          
+                            
                         } //einde shelf
                         scene.add(group);
 
                     }
 
+                   
                     var object = worldObjects[command.parameters.guid];
 
                     object.position.x = command.parameters.x;
                     object.position.y = command.parameters.y;
                     object.position.z = command.parameters.z;
 
-                    object.rotation.x = command.parameters.rotationX;
-                    object.rotation.y = command.parameters.rotationY;
-                    object.rotation.z = command.parameters.rotationZ;
+                    
+                   
+
 
                 }
             }

@@ -11,16 +11,19 @@ namespace Models {
         private List<IObserver<Command>> observers = new List<IObserver<Command>>();
         
         public World() {
-            Robot a = CreateRobot(1, 0, 0);
-            Robot b = CreateRobot(0, 0, 0);
-            Robot c = CreateRobot(3, 0, 0);
-            Robot d = CreateRobot(4, 0, 0);
-            Robot e = CreateRobot(5, 0, 0);
-            Robot f = CreateRobot(6, 0, 0);
+            //Robot a = CreateRobot(1, 0, 0);
+            //Robot b = CreateRobot(0, 0, 0);
+            //Robot c = CreateRobot(3, 0, 0);
+            //Robot d = CreateRobot(4, 0, 0);
+            //Robot e = CreateRobot(5, 0, 0);
+            //Robot f = CreateRobot(6, 0, 0);
 
-            Shelf ab = CreateShelf(10, 10, 3);
-            a.Changedes(20, 0, 0);
-            b.Move(15, 0, 0);
+            Shelf ab = CreateShelf(1, 1, 1);
+            Shelf cd = CreateShelf(2, 2, 1);
+            Shelf de = CreateShelf(3, 1, 2);
+            //a.Changedes(20, 0, 0);
+            //b.Move(15, 0, 0);
+
 
 
         }
