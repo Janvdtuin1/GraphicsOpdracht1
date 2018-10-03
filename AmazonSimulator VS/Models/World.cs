@@ -12,7 +12,6 @@ namespace Models {
         private List<IObserver<Command>> observers = new List<IObserver<Command>>();
         
         public World() {
-<<<<<<< HEAD
             //Robot a = CreateRobot(1, 0, 0);
             //Robot b = CreateRobot(0, 0, 0);
             //Robot c = CreateRobot(3, 0, 0);
@@ -28,7 +27,7 @@ namespace Models {
 
 
 
-=======
+
             Robot a = CreateRobot(1, 0, 0);
             Robot b = CreateRobot(0, 0, 0);
             Robot c = CreateRobot(3, 0, 0);
@@ -49,7 +48,6 @@ namespace Models {
             g.Add_vertex('H', new Dictionary<char, int>() { { 'E', 1 }, { 'F', 3 } });
 
             g.Shortest_path('A', 'H').ForEach(x => Console.WriteLine(x));
->>>>>>> origin/sjimmielaatsteweek
         }
 
         private Robot CreateRobot(double x, double y, double z) {
