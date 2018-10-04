@@ -28,14 +28,14 @@ namespace Models {
 
 
 
-            Robot a = CreateRobot(1, 0, 0);
-            Robot b = CreateRobot(0, 0, 0);
-            Robot c = CreateRobot(3, 0, 0);
-            Robot d = CreateRobot(4, 0, 0);
-            Robot e = CreateRobot(5, 0, 0);
-            Robot f = CreateRobot(6, 0, 0);
-            a.Changedes(20, 0, 0);
-            b.Move(15, 0, 0);
+            Robot a = CreateRobot(1, 0, 1);
+            Robot b = CreateRobot(0, 0, 1);
+            Robot c = CreateRobot(3, 0,1);
+            Robot d = CreateRobot(4, 0, 1);
+            Robot e = CreateRobot(5, 0, 1);
+            Robot f = CreateRobot(6, 0, 1);
+            a.Changedes(20, 0, 2);
+            b.Move(15, 0, 2);
 
             Graph g = new Graph();
             g.Add_vertex('A', new Dictionary<char, int>() { { 'B', 7 }, { 'C', 8 } });
