@@ -25,9 +25,9 @@
             function init() {
                 camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
                 cameraControls = new THREE.OrbitControls(camera);
-                camera.position.z = 15;
-                camera.position.y = 5;
-                camera.position.x = 15;
+                camera.position.z = 35;
+                camera.position.y = 35;
+                camera.position.x = 35;
                 cameraControls.update();
                 scene = new THREE.Scene();
                 renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -38,13 +38,21 @@
                 window.addEventListener('resize', onWindowResize, false);
 
                 var geometry = new THREE.PlaneGeometry(30, 30, 32);
-                var material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/vloer.jpg"), side: THREE.DoubleSide });
+                var material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/beton.jpg"), side: THREE.DoubleSide });
 
                 var plane = new THREE.Mesh(geometry, material);
                 plane.rotation.x = Math.PI / 2.0;
                 plane.position.x = 15;
                 plane.position.z = 15;
                 scene.add(plane);
+
+                var weggeometry = new THREE.PlaneGeometry(100, 10, 32);
+                var wegmateriaal = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/weg/weg.jpg"), side: THREE.DoubleSide });
+                var wegplane = new THREE.Mesh(weggeometry, wegmateriaal);
+                wegplane.rotation.x = Math.PI / 2.0;
+               wegplane.position.x = 15;
+                wegplane.position.z = 35;
+                scene.add(wegplane)
 
 
                 var light = new THREE.AmbientLight(0x404040);
@@ -82,36 +90,21 @@
                 var muurmaterial = new THREE.MeshFaceMaterial(muurtextures);
                 var rightwall = new THREE.Mesh(muur, muurmaterial);
                 var frontwall = new THREE.Mesh(muur, muurmaterial);
-                var leftwall = new THREE.Mesh(muur, muurmaterial);
                 var backwall = new THREE.Mesh(muur, muurmaterial);
 
                 //rechts
-                rightwall.position.x = 15;
-                rightwall.position.y = 4;
-
+                rightwall.position.set(15, 4, 0);
                 //voorkant
                 frontwall.rotation.y = 92.69;
-                frontwall.position.x = 0;
-                frontwall.position.y = 4;
-                frontwall.position.z = 15;
-
-                //links
-                leftwall.position.x = 15;
-                leftwall.position.y = 4;
-                leftwall.position.z = 30;
-
+                frontwall.position.set(0, 4, 15);
+                
                 //achterkant
                 backwall.rotation.y = 92.69;
-                backwall.position.x = 30;
-                backwall.position.y = 4;
-                backwall.position.z = 15;
+                backwall.position.set(30, 4, 15);
 
-                scene.add(rightwall);
-                scene.add(frontwall);
-                scene.add(backwall);
-                scene.add(leftwall);
+                scene.add(rightwall, frontwall, backwall);
 
-
+                
             }
 
             function onWindowResize() {
@@ -129,6 +122,7 @@
             exampleSocket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/connect_client");
             exampleSocket.onmessage = function (event) {
                 var command = parseCommand(event.data);
+                var group = new THREE.Group();
 
                 if (command.command == "update") {
                     if (Object.keys(worldObjects).indexOf(command.parameters.guid) < 0) {
@@ -148,7 +142,7 @@
                             robot.position.y = 0.15;
 
 
-                            var group = new THREE.Group();
+                          
                             group.add(robot);
 
 
@@ -165,22 +159,38 @@
                                 new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/oak_planks.png"), side: THREE.DoubleSide }), //BOTTOM
                                 new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/stelling.png"), side: THREE.DoubleSide }), //FRONT
                                 new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/stelling.png"), side: THREE.DoubleSide }), //BACK
-
-
                             ];
 
                             var stellingmateriaal = new THREE.MeshFaceMaterial(stellingtexture);
                             var shelf = new THREE.Mesh(stellingbox, stellingmateriaal);
 
                             console.log(shelf.position.y);
-                            var group = new THREE.Group();
-
                             group.add(shelf);
-
-                            worldObjects[command.parameters.guid] = group;
-
-
+                            worldObjects[command.parameters.guid] = group;                 
                         } //einde shelf
+
+                        else if (command.parameters.type == "truck") {
+                            //Truck inladen met de OBJ Loader
+                            var mtlLoader = new THREE.MTLLoader();
+                            mtlLoader.setTexturePath('obj/');
+                            mtlLoader.setPath('obj/');
+                            mtlLoader.load('truck2.mtl', function (materials) {
+
+                                materials.preload();
+
+                                var objLoader = new THREE.OBJLoader();
+                                objLoader.setMaterials(materials);
+                                objLoader.setPath('obj/');
+                                objLoader.load('truck2.obj', function (truck) {
+                                    scene.add(truck);
+                                    truck.rotation.y = 9.40;
+                                    truck.scale.set(0.025, 0.025, 0.025);
+                                    group.add(truck);
+                                });
+
+                            });
+                            worldObjects[command.parameters.guid] = group;
+                        } //einde truck      
                         scene.add(group);
 
                     }
