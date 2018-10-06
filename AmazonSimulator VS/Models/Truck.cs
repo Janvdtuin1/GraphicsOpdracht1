@@ -1,10 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace Models {
-    public class Robot : IUpdatable {
+namespace Models
+{
+    public class Truck : IUpdatable
+    {
         private double _x = 0;
         private double _y = 0;
         private double _z = 0;
@@ -30,12 +32,13 @@ namespace Models {
 
         bool destinationreached = true;
         bool isMoving = false;
-        public double speed = 0.10;
+        public double speed = 0.20;
 
         public bool needsUpdate = true;
 
-        public Robot(double x, double y, double z, double rotationX, double rotationY, double rotationZ) {
-            this.type = "robot";
+        public Truck(double x, double y, double z, double rotationX, double rotationY, double rotationZ)
+        {
+            this.type = "truck";
             this.guid = Guid.NewGuid();
 
             this._x = x;
@@ -47,7 +50,8 @@ namespace Models {
             this._rZ = rotationZ;
         }
 
-        public virtual void Move(double x, double y, double z) {
+        public virtual void Move(double x, double y, double z)
+        {
             this._x = x;
             this._y = y;
             this._z = z;
@@ -55,7 +59,8 @@ namespace Models {
             needsUpdate = false;
         }
 
-        public virtual void Rotate(double rotationX, double rotationY, double rotationZ) {
+        public virtual void Rotate(double rotationX, double rotationY, double rotationZ)
+        {
             this._rX = rotationX;
             this._rY = rotationY;
             this._rZ = rotationZ;
@@ -65,8 +70,9 @@ namespace Models {
 
         public virtual bool Update(int tick)
         {
-            if(needsUpdate) {
-                Moving();                
+            if (needsUpdate)
+            {
+                Moving();
                 return true;
             }
             return false;
@@ -74,7 +80,6 @@ namespace Models {
 
         public virtual void Changedes(double xdes, double ydes, double zdes)
         {
-
             this._tx = xdes;
             this._ty = ydes;
             this._tz = zdes;
@@ -86,30 +91,13 @@ namespace Models {
 
             if (isMoving)
             {
+                Console.WriteLine(x);
+                Console.WriteLine(targetX);
+                Console.WriteLine(isMoving);
                 if (!(Convert.ToInt16(x) == Convert.ToInt16(targetX)))
                 {
-                    _rY = 92.69;
-                    if (x < targetX)
-                    {
-                        _x += speed;
-                    }
-                    else if (x > targetX)
-                    {
-                        _x -= speed;
-                    }
-
-                }
-                else if(!(Convert.ToInt16(z) == Convert.ToInt16(targetZ)))
-                {
-                    _rY = 0;
-                    if (z < targetZ)
-                    {
-                        _z += speed;
-                    }
-                    else if (z > targetZ)
-                    {
-                        _z -= speed;
-                    }
+                    _x += speed;
+                    Console.WriteLine("testc");
 
                 }
 

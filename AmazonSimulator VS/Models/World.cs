@@ -11,6 +11,7 @@ namespace Models {
 
         private List<IObserver<Command>> observers = new List<IObserver<Command>>();
         
+<<<<<<< HEAD
         public World() {
 
             Shelf ab = CreateShelf(14, 2.15, 15);
@@ -30,6 +31,32 @@ namespace Models {
             g.Add_vertex(B, new Dictionary<Node, int>() { { A, 1 }, { C, 2 } });
 
             g.Add_vertex(C, new Dictionary<Node, int>() { { B, 2 }, { D, 1 } });
+=======
+        public World() {   
+            Robot a = CreateRobot(1, 0, 1);
+            Robot b = CreateRobot(0, 0, 1);
+            Robot c = CreateRobot(3, 0,1);
+            Robot d = CreateRobot(4, 0, 1);
+            Robot e = CreateRobot(5, 0, 1);
+            Robot f = CreateRobot(6, 0, 1);
+            a.Changedes(20, 0, 2);
+            b.Changedes(40, 8, 2);
+
+        
+            Truck truck1 = CreateTruck(0, 0,0);
+            truck1.Move(-30, 0, 33);
+            truck1.Changedes(25, 0, 0);
+            //stellingen, moet nog even in een loop
+
+            Shelf shelf1 = CreateShelf(5, 2.5, 10);
+            Shelf shelf2 = CreateShelf(5, 2.5, 12);
+            Shelf shelf3 = CreateShelf(5, 2.5, 14);
+            Shelf shelf4 = CreateShelf(5, 2.5, 16);
+            Shelf shelf5 = CreateShelf(5, 2.5, 18);
+            Shelf shelf6 = CreateShelf(5, 2.5, 20);
+            Shelf shelf7 = CreateShelf(5, 2.5, 22);
+            Shelf shelf8 = CreateShelf(5, 2.5, 24);
+>>>>>>> MergeTest
 
             g.Add_vertex(D, new Dictionary<Node, int>() { { C, 1 }, { A, 2 } });
 
@@ -72,6 +99,14 @@ namespace Models {
 
         }
 
+        private Truck CreateTruck(double x, double y, double z)
+        {
+            Truck t = new Truck(x, y, z,0,0,0);
+            worldObjects.Add(t);
+            return t;
+
+
+        }
         public IDisposable Subscribe(IObserver<Command> observer)
         {
             if (!observers.Contains(observer)) {
