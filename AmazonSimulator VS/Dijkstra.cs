@@ -3,26 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AmazonSimulator_VS;
+using Controllers;
 
-namespace AmazonSimulator_VS
+namespace Models
 {
     public class Graph
     {
-        private Dictionary<char, Dictionary<char, int>> vertices = new Dictionary<char, Dictionary<char, int>>();
+
+        //private Dictionary<string, Dictionary<string, int>> vertices = new Dictionary<string, Dictionary<string, int>>();
+        private Dictionary<Node, Dictionary<Node, int>> vertices = new Dictionary<Node, Dictionary<Node, int>>();
 
         
-        public void Add_vertex(char name, Dictionary<char, int> edges)
+        public void Add_vertex(Node a, Dictionary<Node, int> edges)
         {
-            vertices[name] = edges;
+            vertices[a] = edges;
         }
 
-        public List<char> Shortest_path(char start, char finish)
+        public List<Node> Shortest_path(Node start, Node finish)
         {
-            var previous = new Dictionary<char, char>();
-            var distances = new Dictionary<char, int>();
-            var nodes = new List<char>();
+            var previous = new Dictionary<Node, Node>();
+            var distances = new Dictionary<Node, int>();
+            var nodes = new List<Node>();
 
-            List<char> path = null;
+            List<Node> path = null;
 
             foreach (var vertex in vertices)
             {
@@ -47,7 +50,7 @@ namespace AmazonSimulator_VS
 
                 if (smallest == finish)
                 {
-                    path = new List<char>();
+                    path = new List<Node>();
                     while (previous.ContainsKey(smallest))
                     {
                         path.Add(smallest);

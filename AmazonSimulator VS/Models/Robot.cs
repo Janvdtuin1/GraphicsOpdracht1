@@ -74,7 +74,6 @@ namespace Models {
 
         public virtual void Changedes(double xdes, double ydes, double zdes)
         {
-
             this._tx = xdes;
             this._ty = ydes;
             this._tz = zdes;
@@ -86,14 +85,31 @@ namespace Models {
 
             if (isMoving)
             {
-                Console.WriteLine(x);
-                Console.WriteLine(targetX);
-                Console.WriteLine(isMoving);
                 if (!(Convert.ToInt16(x) == Convert.ToInt16(targetX)))
                 {
-                    _x += speed;
-                    Console.WriteLine("testc");
-                    
+                    _rY = 92.69;
+                    if (x < targetX)
+                    {
+                        _x += speed;
+                    }
+                    else if (x > targetX)
+                    {
+                        _x -= speed;
+                    }
+
+                }
+                else if(!(Convert.ToInt16(z) == Convert.ToInt16(targetZ)))
+                {
+                    _rY = 0;
+                    if (z < targetZ)
+                    {
+                        _z += speed;
+                    }
+                    else if (z > targetZ)
+                    {
+                        _z -= speed;
+                    }
+
                 }
 
                 else

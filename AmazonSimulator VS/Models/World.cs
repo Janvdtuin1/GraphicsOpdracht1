@@ -11,48 +11,68 @@ namespace Models {
 
         private List<IObserver<Command>> observers = new List<IObserver<Command>>();
         
-        public World() {   
-            Robot a = CreateRobot(1, 0, 1);
-            Robot b = CreateRobot(0, 0, 1);
-            Robot c = CreateRobot(3, 0,1);
-            Robot d = CreateRobot(4, 0, 1);
-            Robot e = CreateRobot(5, 0, 1);
-            Robot f = CreateRobot(6, 0, 1);
-            a.Changedes(20, 0, 2);
-            b.Changedes(40, 8, 2);
+        public World() {
 
-        
-            Truck truck1 = CreateTruck(0, 0,0);
-            truck1.Move(-30, 0, 33);
-            truck1.Changedes(25, 0, 0);
-            //stellingen, moet nog even in een loop
+            Shelf ab = CreateShelf(14, 2.15, 15);
+            Shelf cd = CreateShelf(15, 2.15, 15);
+            Shelf de = CreateShelf(16, 2.15, 15);
 
-            Shelf shelf1 = CreateShelf(5, 2.5, 10);
-            Shelf shelf2 = CreateShelf(5, 2.5, 12);
-            Shelf shelf3 = CreateShelf(5, 2.5, 14);
-            Shelf shelf4 = CreateShelf(5, 2.5, 16);
-            Shelf shelf5 = CreateShelf(5, 2.5, 18);
-            Shelf shelf6 = CreateShelf(5, 2.5, 20);
-            Shelf shelf7 = CreateShelf(5, 2.5, 22);
-            Shelf shelf8 = CreateShelf(5, 2.5, 24);
+            Robot a = CreateRobot(2, 0.05, 0);
+            a.Changedes(20, 0, 20);
 
             Graph g = new Graph();
-            g.Add_vertex('A', new Dictionary<char, int>() { { 'B', 7 }, { 'C', 8 } });
-            g.Add_vertex('B', new Dictionary<char, int>() { { 'A', 7 }, { 'F', 2 } });
-            g.Add_vertex('C', new Dictionary<char, int>() { { 'A', 8 }, { 'F', 6 }, { 'G', 4 } });
-            g.Add_vertex('D', new Dictionary<char, int>() { { 'F', 8 } });
-            g.Add_vertex('E', new Dictionary<char, int>() { { 'H', 1 } });
-            g.Add_vertex('F', new Dictionary<char, int>() { { 'B', 2 }, { 'C', 6 }, { 'D', 8 }, { 'G', 9 }, { 'H', 3 } });
-            g.Add_vertex('G', new Dictionary<char, int>() { { 'C', 4 }, { 'F', 9 } });
-            g.Add_vertex('H', new Dictionary<char, int>() { { 'E', 1 }, { 'F', 3 } });
+            Node A = new Node("A", 2, 0);
+            Node B = new Node("B", 2, 1);
+            Node C = new Node("C", 4, 1);
+            Node D = new Node("D", 4, 0);
+            g.Add_vertex(A, new Dictionary<Node, int>() { { B, 1 }, { D, 2 } });
 
-            g.Shortest_path('A', 'H').ForEach(x => Console.WriteLine(x));
+            g.Add_vertex(B, new Dictionary<Node, int>() { { A, 1 }, { C, 2 } });
+
+            g.Add_vertex(C, new Dictionary<Node, int>() { { B, 2 }, { D, 1 } });
+
+            g.Add_vertex(D, new Dictionary<Node, int>() { { C, 1 }, { A, 2 } });
+
+
+            List<Node> route = g.Shortest_path(A, D);
+            Node test = route[0];
+            Console.WriteLine(test.GetNaam());
+            foreach (Node punt in route)
+
+
+            {
+                //a.Changedes(punt.GetX(), 0.05, 0);
+               
+            }
+
+            Truck trucklolxdkekhaha=CreateTruck(0, 0, 0);
+            trucklolxdkekhaha.Move(-30, 0, 33);
+            trucklolxdkekhaha.Changedes(25, 0, 0);
+
+
+            //DijkstraMove(g.Shortest_path("A", "B"), a);
+
+
+            //g.Shortest_path("A", "D").ForEach(x => Console.WriteLine(x));
         }
 
+        //private void DijkstraMove(List<string> lijst, Robot robocop)
+        //{
+        //    
+        //}
         private Robot CreateRobot(double x, double y, double z) {
             Robot r = new Robot(x,y,z,0,0,0);
             worldObjects.Add(r);
             return r;
+        }
+
+        private Truck CreateTruck(double x, double y, double z)
+        {
+            Truck t = new Truck(x, y, z, 0, 0, 0);
+            worldObjects.Add(t);
+            return t;
+
+
         }
 
         private Shelf CreateShelf(double x, double y, double z)
@@ -64,14 +84,6 @@ namespace Models {
 
         }
 
-        private Truck CreateTruck(double x, double y, double z)
-        {
-            Truck t = new Truck(x, y, z,0,0,0);
-            worldObjects.Add(t);
-            return t;
-
-
-        }
         public IDisposable Subscribe(IObserver<Command> observer)
         {
             if (!observers.Contains(observer)) {
