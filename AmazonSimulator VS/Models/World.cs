@@ -12,44 +12,51 @@ namespace Models {
         private List<IObserver<Command>> observers = new List<IObserver<Command>>();
         
         public World() {
-            //Robot a = CreateRobot(1, 0, 0);
-            //Robot b = CreateRobot(0, 0, 0);
-            //Robot c = CreateRobot(3, 0, 0);
-            //Robot d = CreateRobot(4, 0, 0);
-            //Robot e = CreateRobot(5, 0, 0);
-            //Robot f = CreateRobot(6, 0, 0);
 
-            Shelf ab = CreateShelf(1, 1, 1);
-            Shelf cd = CreateShelf(2, 2, 1);
-            Shelf de = CreateShelf(3, 1, 2);
-            //a.Changedes(20, 0, 0);
-            //b.Move(15, 0, 0);
+            Shelf ab = CreateShelf(14, 2.15, 15);
+            Shelf cd = CreateShelf(15, 2.15, 15);
+            Shelf de = CreateShelf(16, 2.15, 15);
 
-
-
-
-            Robot a = CreateRobot(1, 0, 0);
-            Robot b = CreateRobot(0, 0, 0);
-            Robot c = CreateRobot(3, 0, 0);
-            Robot d = CreateRobot(4, 0, 0);
-            Robot e = CreateRobot(5, 0, 0);
-            Robot f = CreateRobot(6, 0, 0);
-            a.Changedes(20, 0, 0);
-            b.Move(15, 0, 0);
+            Robot a = CreateRobot(2, 0.05, 0);
+            a.Changedes(20, 0, 20);
 
             Graph g = new Graph();
-            g.Add_vertex('A', new Dictionary<char, int>() { { 'B', 7 }, { 'C', 8 } });
-            g.Add_vertex('B', new Dictionary<char, int>() { { 'A', 7 }, { 'F', 2 } });
-            g.Add_vertex('C', new Dictionary<char, int>() { { 'A', 8 }, { 'F', 6 }, { 'G', 4 } });
-            g.Add_vertex('D', new Dictionary<char, int>() { { 'F', 8 } });
-            g.Add_vertex('E', new Dictionary<char, int>() { { 'H', 1 } });
-            g.Add_vertex('F', new Dictionary<char, int>() { { 'B', 2 }, { 'C', 6 }, { 'D', 8 }, { 'G', 9 }, { 'H', 3 } });
-            g.Add_vertex('G', new Dictionary<char, int>() { { 'C', 4 }, { 'F', 9 } });
-            g.Add_vertex('H', new Dictionary<char, int>() { { 'E', 1 }, { 'F', 3 } });
+            Node A = new Node("A", 2, 0);
+            Node B = new Node("B", 2, 1);
+            Node C = new Node("C", 4, 1);
+            Node D = new Node("D", 4, 0);
+            g.Add_vertex(A, new Dictionary<Node, int>() { { B, 1 }, { D, 2 } });
 
-            g.Shortest_path('A', 'H').ForEach(x => Console.WriteLine(x));
+            g.Add_vertex(B, new Dictionary<Node, int>() { { A, 1 }, { C, 2 } });
+
+            g.Add_vertex(C, new Dictionary<Node, int>() { { B, 2 }, { D, 1 } });
+
+            g.Add_vertex(D, new Dictionary<Node, int>() { { C, 1 }, { A, 2 } });
+
+
+            List<Node> route = g.Shortest_path(A, D);
+            Node test = route[0];
+            Console.WriteLine(test.GetNaam());
+            foreach (Node punt in route)
+
+
+            {
+                //a.Changedes(punt.GetX(), 0.05, 0);
+               
+            }
+
+
+
+            //DijkstraMove(g.Shortest_path("A", "B"), a);
+
+
+            //g.Shortest_path("A", "D").ForEach(x => Console.WriteLine(x));
         }
 
+        //private void DijkstraMove(List<string> lijst, Robot robocop)
+        //{
+        //    
+        //}
         private Robot CreateRobot(double x, double y, double z) {
             Robot r = new Robot(x,y,z,0,0,0);
             worldObjects.Add(r);
