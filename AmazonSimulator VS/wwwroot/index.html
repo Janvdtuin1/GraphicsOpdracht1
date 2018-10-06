@@ -25,15 +25,15 @@
             function init() {
                 camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
                 cameraControls = new THREE.OrbitControls(camera);
-<<<<<<< HEAD
+
                 camera.position.z = 30;
                 camera.position.y = 5;
                 camera.position.x = 30;
-=======
+
                 camera.position.z = 35;
                 camera.position.y = 35;
                 camera.position.x = 35;
->>>>>>> MergeTest
+
                 cameraControls.update();
                 scene = new THREE.Scene();
                 renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -43,13 +43,12 @@
 
                 window.addEventListener('resize', onWindowResize, false);
 
-<<<<<<< HEAD
+
                 var geometry = new THREE.PlaneGeometry(30, 30, 30);
                 var material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/vloer.jpg"), side: THREE.DoubleSide });
-=======
+
                 var geometry = new THREE.PlaneGeometry(30, 30, 32);
                 var material = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load("textures/beton.jpg"), side: THREE.DoubleSide });
->>>>>>> MergeTest
 
                 var plane = new THREE.Mesh(geometry, material);
                 plane.rotation.x = Math.PI / 2.0;
@@ -253,19 +252,11 @@
                     object.position.y = command.parameters.y;
                     object.position.z = command.parameters.z;
 
-<<<<<<< HEAD
                     object.rotation.x = command.parameters.rotationX;
                     object.rotation.y = command.parameters.rotationY;
                     object.rotation.z = command.parameters.rotationZ;
 
-                    
-                   
-=======
-
-
->>>>>>> MergeTest
-
-
+   
                 }
             }
 

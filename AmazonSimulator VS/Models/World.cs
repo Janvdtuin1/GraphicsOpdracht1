@@ -11,7 +11,6 @@ namespace Models {
 
         private List<IObserver<Command>> observers = new List<IObserver<Command>>();
         
-<<<<<<< HEAD
         public World() {
 
             Shelf ab = CreateShelf(14, 2.15, 15);
@@ -31,7 +30,6 @@ namespace Models {
             g.Add_vertex(B, new Dictionary<Node, int>() { { A, 1 }, { C, 2 } });
 
             g.Add_vertex(C, new Dictionary<Node, int>() { { B, 2 }, { D, 1 } });
-=======
         public World() {   
             Robot a = CreateRobot(1, 0, 1);
             Robot b = CreateRobot(0, 0, 1);
@@ -56,7 +54,6 @@ namespace Models {
             Shelf shelf6 = CreateShelf(5, 2.5, 20);
             Shelf shelf7 = CreateShelf(5, 2.5, 22);
             Shelf shelf8 = CreateShelf(5, 2.5, 24);
->>>>>>> MergeTest
 
             g.Add_vertex(D, new Dictionary<Node, int>() { { C, 1 }, { A, 2 } });
 
