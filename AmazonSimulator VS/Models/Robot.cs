@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using AmazonSimulator_VS;
+using Controllers;
 
 namespace Models {
     public class Robot : IUpdatable {
@@ -14,6 +16,12 @@ namespace Models {
         private double _tx = 0;
         private double _ty = 0;
         private double _tz = 0;
+        private List<Node> _route;
+        private bool isMoving = false;
+        private bool onRoute = false;
+        private Shelf shelf;
+        private Node next;
+
 
         public string type { get; }
         public Guid guid { get; }
@@ -28,8 +36,7 @@ namespace Models {
         public double targetY { get { return _ty; } }
         public double targetZ { get { return _tz; } }
 
-        bool destinationreached = true;
-        bool isMoving = false;
+        
         public double speed = 0.10;
 
         public bool needsUpdate = true;
@@ -55,6 +62,12 @@ namespace Models {
             needsUpdate = false;
         }
 
+        public bool CheckMove()
+        {
+            return (isMoving);
+        }
+
+
         public virtual void Rotate(double rotationX, double rotationY, double rotationZ) {
             this._rX = rotationX;
             this._rY = rotationY;
@@ -66,10 +79,69 @@ namespace Models {
         public virtual bool Update(int tick)
         {
             if(needsUpdate) {
-                Moving();                
+                Moving();
+                Route();
+                MoveShelf();
                 return true;
             }
             return false;
+        }
+
+        public virtual void MoveShelf()
+        {
+            if(!(shelf == null))
+            {
+                shelf.Move(_x, (_y + 2.3), _z);
+            }
+        }
+
+        public virtual void Changeroute(List<Node> route)
+        {
+            this._route = route;
+            onRoute = true;
+            needsUpdate = true;
+        }
+
+        public virtual void Route()
+        {
+            if(!isMoving && !(shelf==null)) 
+            {
+                if(next.CheckDropoff())
+                {
+                    shelf.Move(0, 10000, 0);
+                    shelf = null;
+                }
+                
+            }
+
+            if (onRoute)
+            {
+                if(!isMoving)
+                {
+                    if(!(next == null))
+                    {
+                        if(shelf == null)
+                        {
+                            
+                            if (next.CheckShelf())
+                            {
+                                shelf = next.PopShelf();
+                            }
+                        }
+                       
+                    }
+                        next = _route.Last();
+                        Changedes(next.GetX(), 0, next.GetZ());
+                        _route.RemoveAt(_route.Count()-1);
+                    if(_route.Count()==0)
+                    {
+                      
+                        onRoute = false;
+                    }
+
+                }
+            }
+
         }
 
         public virtual void Changedes(double xdes, double ydes, double zdes)

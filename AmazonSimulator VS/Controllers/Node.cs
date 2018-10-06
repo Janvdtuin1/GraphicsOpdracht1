@@ -8,22 +8,19 @@ namespace Controllers
 {
     public class Node
     {
-
-        private string naam;
         private int x;
         private int z;
+        private bool hasShelf=false;
+        private bool isStash = false;
+        private bool isDropoff = false;
+        private Shelf shelf;
 
-        public Node (string naam, int x, int z)
+        public Node (int x, int z)
         {
-            this.naam = naam;
             this.x = x;
-            this.z = z;
+            this.z = z;         
         }
 
-        public string GetNaam()
-        {
-            return naam;
-        }
         public int GetX()
         {
             return x;
@@ -33,6 +30,37 @@ namespace Controllers
             return z;
         }
         
+        public void PushShelf(Shelf shelf)
+        {
+            this.shelf = shelf;
+            hasShelf = true;
+            isStash = true;
+        }
+        public Shelf PopShelf()
+        {
+            Shelf shelf2 = shelf;
+            hasShelf = false;
+            shelf = null;
+            return shelf2;
+        }
+        public void SetDropoff()
+        {
+            isDropoff = true;
+        }
+
+
+        public bool CheckDropoff()
+        {
+            return isDropoff;
+        }
+        public bool CheckShelf()
+        {
+            return hasShelf;
+        }
+        public bool CheckStash()
+        {
+            return isStash;
+        }
 
 
 
