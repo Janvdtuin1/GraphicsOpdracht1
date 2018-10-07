@@ -16,6 +16,9 @@ namespace Models
         private double _tx = 0;
         private double _ty = 0;
         private double _tz = 0;
+        private int inv = 0;
+        private bool full = false;
+        private bool killme = false;
 
         public string type { get; }
         public Guid guid { get; }
@@ -25,12 +28,14 @@ namespace Models
         public double rotationX { get { return _rX; } }
         public double rotationY { get { return _rY; } }
         public double rotationZ { get { return _rZ; } }
+        public int inventory { get { return inv; } }
+        public bool checkfull { get { return full; } }
+        public int maxinv { get { return 4; } }
 
         public double targetX { get { return _tx; } }
         public double targetY { get { return _ty; } }
         public double targetZ { get { return _tz; } }
 
-        bool destinationreached = true;
         bool isMoving = false;
         public double speed = 0.20;
 
@@ -70,8 +75,10 @@ namespace Models
 
         public virtual bool Update(int tick)
         {
+            
             if (needsUpdate)
             {
+
                 Moving();
                 return true;
             }
@@ -91,13 +98,11 @@ namespace Models
 
             if (isMoving)
             {
-                Console.WriteLine(x);
-                Console.WriteLine(targetX);
-                Console.WriteLine(isMoving);
+                
                 if (!(Convert.ToInt16(x) == Convert.ToInt16(targetX)))
                 {
                     _x += speed;
-                    Console.WriteLine("testc");
+                    
 
                 }
 
@@ -105,8 +110,28 @@ namespace Models
                 {
                     isMoving = false;
                     needsUpdate = false;
+                    if(killme)
+                    {
+                        _y = 1000;
+                    }
                 }
             }
+        }
+
+        public void PlusInv()
+        {
+            inv += 1;
+            if(inventory==maxinv)
+            {
+                full = true;
+            }
+        }
+
+        public void Kill()
+        {
+            killme = true;
+            Changedes(60, 0, 0);
+            
         }
     }
 }

@@ -17,10 +17,12 @@ namespace Models {
         private double _ty = 0;
         private double _tz = 0;
         private List<Node> _route;
+        private List<Node> _queueroute=null;
         private bool isMoving = false;
         private bool onRoute = false;
+        public bool justDropped = false;
         private Shelf shelf;
-        private Node next;
+        private Node Destination;
 
 
         public string type { get; }
@@ -31,6 +33,7 @@ namespace Models {
         public double rotationX { get { return _rX; } }
         public double rotationY { get { return _rY; } }
         public double rotationZ { get { return _rZ; } }
+        public bool route { get { return onRoute; } }
 
         public double targetX { get { return _tx; } }
         public double targetY { get { return _ty; } }
@@ -41,17 +44,14 @@ namespace Models {
 
         public bool needsUpdate = true;
 
-        public Robot(double x, double y, double z, double rotationX, double rotationY, double rotationZ) {
+        public Robot(Node start) {
             this.type = "robot";
             this.guid = Guid.NewGuid();
 
-            this._x = x;
-            this._y = y;
-            this._z = z;
+            this._x = start.GetX();
+            this._z = start.GetZ();
+            this.Destination = start;
 
-            this._rX = rotationX;
-            this._rY = rotationY;
-            this._rZ = rotationZ;
         }
 
         public virtual void Move(double x, double y, double z) {
@@ -82,6 +82,10 @@ namespace Models {
                 Moving();
                 Route();
                 MoveShelf();
+                if(!(_queueroute==null))
+                {
+                    Queueroute(_queueroute);
+                }
                 return true;
             }
             return false;
@@ -102,36 +106,51 @@ namespace Models {
             needsUpdate = true;
         }
 
-        public virtual void Route()
+        public virtual void Queueroute(List<Node> route)
         {
-            if(!isMoving && !(shelf==null)) 
+            this._queueroute = route;
+            if(!(onRoute) && !(isMoving))
             {
-                if(next.CheckDropoff())
-                {
-                    shelf.Move(0, 10000, 0);
-                    shelf = null;
-                }
-                
+                Changeroute(route);
+                this._queueroute = null;
             }
+        }
+
+        public virtual void Route()
+        {            
+            if(!(isMoving))
+            {
+                if(!(shelf==null))
+                {
+                    if (Destination.CheckDropoff())
+                    {
+                        shelf.Move(0, 10000, 0);
+                        shelf = null;
+                        justDropped = true;
+                    }
+                }
+
+                else if(!(onRoute))
+                {
+                    if (Destination.CheckShelf())
+                    {
+                        shelf = Destination.PopShelf();
+                    }
+
+                }
+
+
+            }
+
 
             if (onRoute)
             {
                 if(!isMoving)
                 {
-                    if(!(next == null))
-                    {
-                        if(shelf == null)
-                        {
-                            
-                            if (next.CheckShelf())
-                            {
-                                shelf = next.PopShelf();
-                            }
-                        }
-                       
-                    }
-                        next = _route.Last();
-                        Changedes(next.GetX(), 0, next.GetZ());
+                   
+
+                        Destination = _route.Last();
+                        Changedes(Destination.GetX(), 0, Destination.GetZ());
                         _route.RemoveAt(_route.Count()-1);
                     if(_route.Count()==0)
                     {
@@ -191,5 +210,39 @@ namespace Models {
                 }
             }
         }
+        
+        public bool CheckShelf()
+        {
+            if(!(shelf == null))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public Node GetDestination()
+        {
+            return this.Destination;
+        }
+
+        public Shelf PopShelf()
+        {
+            Shelf shelf2 = shelf;
+            shelf = null;
+            return shelf2;
+        }
+
+        public bool CheckDropped()
+        {
+            return justDropped;
+        }
+
+        public void SetDropped()
+        {
+            justDropped = !(justDropped);
+        }
+
     }
 }

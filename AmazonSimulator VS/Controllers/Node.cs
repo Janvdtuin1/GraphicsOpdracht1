@@ -14,6 +14,7 @@ namespace Controllers
         private bool isStash = false;
         private bool isDropoff = false;
         private Shelf shelf;
+        private bool isTarget = false;
 
         public Node (int x, int z)
         {
@@ -41,6 +42,7 @@ namespace Controllers
             Shelf shelf2 = shelf;
             hasShelf = false;
             shelf = null;
+            isTarget = false;
             return shelf2;
         }
         public void SetDropoff()
@@ -62,7 +64,14 @@ namespace Controllers
             return isStash;
         }
 
-
+        public bool CheckTarget()
+        {
+            return isTarget;
+        }
+        public void SetTarget()
+        {
+            isTarget = !(isTarget);
+        }
 
     }
 }
