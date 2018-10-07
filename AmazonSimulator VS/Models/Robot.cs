@@ -17,12 +17,12 @@ namespace Models {
         private double _ty = 0;
         private double _tz = 0;
         private List<Node> _route;
-        private List<Node> _queueroute=null;
-        private bool isMoving = false;
-        private bool onRoute = false;
-        public bool justDropped = false;
+        private List<Node> _queueroute = null;
+        private bool moving = false;
+        private bool onroute = false;
+        private bool _justdropped = false;
         private Shelf shelf;
-        private Node Destination;
+        private Node _destination;
 
 
         public string type { get; }
@@ -33,14 +33,16 @@ namespace Models {
         public double rotationX { get { return _rX; } }
         public double rotationY { get { return _rY; } }
         public double rotationZ { get { return _rZ; } }
-        public bool route { get { return onRoute; } }
+        public bool route { get { return onroute; } }
 
         public double targetX { get { return _tx; } }
         public double targetY { get { return _ty; } }
         public double targetZ { get { return _tz; } }
+        public bool justdropped { get { return _justdropped; } }
+        public bool checkshelf { get { return (!(shelf == null)); } }
+        public Node destination { get { return _destination; } }
 
-        
-        public double speed = 0.10;
+        private double speed = 0.10;
 
         public bool needsUpdate = true;
 
@@ -48,10 +50,15 @@ namespace Models {
             this.type = "robot";
             this.guid = Guid.NewGuid();
 
-            this._x = start.GetX();
-            this._z = start.GetZ();
-            this.Destination = start;
+            this._x = start.x;
+            this._z = start.z;
+            this._destination = start;
 
+        }
+
+        public void Changespeed(double speed)
+        {
+            this.speed = speed;
         }
 
         public virtual void Move(double x, double y, double z) {
@@ -64,9 +71,8 @@ namespace Models {
 
         public bool CheckMove()
         {
-            return (isMoving);
+            return (moving);
         }
-
 
         public virtual void Rotate(double rotationX, double rotationY, double rotationZ) {
             this._rX = rotationX;
@@ -76,13 +82,19 @@ namespace Models {
             needsUpdate = false;
         }
 
+        /// <summary>
+        /// De update functie word elke vijftig ticks uitgevoerd. De update functie voert verschillende functies uit die vaak geupdate moeten worden en returned daarna true om te laten zien dat hij alles geupdate heeft.
+        /// </summary>
+        /// <param name="tick"></param>
+        /// <returns></returns>
         public virtual bool Update(int tick)
         {
             if(needsUpdate) {
                 Moving();
+                ShelfInteractie();
                 Route();
-                MoveShelf();
-                if(!(_queueroute==null))
+                MoveShelf();               
+                if (!(_queueroute==null))
                 {
                     Queueroute(_queueroute);
                 }
@@ -91,90 +103,107 @@ namespace Models {
             return false;
         }
 
+        /// <summary>
+        /// Verplaatst het shelf object in deze robot telkens naar iets boven de robot zijn positie.
+        /// </summary>
         public virtual void MoveShelf()
         {
-            if(!(shelf == null))
+            if(checkshelf)
             {
                 shelf.Move(_x, (_y + 2.3), _z);
             }
         }
 
+        //Verandert de huidige route variabele.
         public virtual void Changeroute(List<Node> route)
         {
             this._route = route;
-            onRoute = true;
+            onroute = true;
             needsUpdate = true;
         }
 
+        /// <summary>
+        /// Slaat een route op en zet deze pas in de huidige route als de robot niet meer een route volgt.
+        /// </summary>
+        /// <param name="route"></param>
         public virtual void Queueroute(List<Node> route)
         {
             this._queueroute = route;
-            if(!(onRoute) && !(isMoving))
+            if(!(onroute) && !(moving))
             {
                 Changeroute(route);
                 this._queueroute = null;
             }
         }
 
-        public virtual void Route()
-        {            
-            if(!(isMoving))
+        /// <summary>
+        /// Deze functie runt telkens en checkt of de robot net is gaan stil staan op een node met een shelf.
+        /// Als dit zo is neemt dit de robot mee.
+        /// Als dit niet zo is checkt hij of hij aan het einde van een route stilstaat op een dropoff point.
+        /// Als dit zo is dropt hij hier zijn shelf.
+        /// </summary>
+        public virtual void ShelfInteractie()
+        {
+            if (!(moving))
             {
-                if(!(shelf==null))
+                if (checkshelf)
                 {
-                    if (Destination.CheckDropoff())
+                    if (_destination.dropoff)
                     {
                         shelf.Move(0, 10000, 0);
                         shelf = null;
-                        justDropped = true;
+                        _justdropped = true;
                     }
                 }
 
-                else if(!(onRoute))
+                else if (!(onroute))
                 {
-                    if (Destination.CheckShelf())
+                    if (_destination.checkshelf)
                     {
-                        shelf = Destination.PopShelf();
+                        shelf = _destination.PopShelf();
                     }
-
                 }
-
-
             }
+        }
 
-
-            if (onRoute)
+        /// <summary>
+        /// Als de robot onroute is en stilstaat word de destination verandert naar de volgende node in de route lijst.
+        /// </summary>
+        public virtual void Route()
+        {            
+            if (onroute)
             {
-                if(!isMoving)
+                if(!moving)
                 {
-                   
-
-                        Destination = _route.Last();
-                        Changedes(Destination.GetX(), 0, Destination.GetZ());
+                    _destination = _route.Last();
+                        Changedes(_destination.x, 0, _destination.z);
                         _route.RemoveAt(_route.Count()-1);
                     if(_route.Count()==0)
                     {
-                      
-                        onRoute = false;
+
+                        onroute = false;
                     }
 
                 }
             }
 
         }
-
+        
         public virtual void Changedes(double xdes, double ydes, double zdes)
         {
             this._tx = xdes;
             this._ty = ydes;
             this._tz = zdes;
-            isMoving = true;
+            moving = true;
             needsUpdate = true;
         }
+        /// <summary>
+        /// Beweegt de robot op basis van zijn speed per 50 ticks naar de targetX en of targetZ.
+        /// </summary>
         public virtual void Moving()
         {
 
-            if (isMoving)
+            if (moving)
             {
                 if (!(Convert.ToInt16(x) == Convert.ToInt16(targetX)))
                 {
@@ -200,31 +229,14 @@ namespace Models {
                     {
                         _z -= speed;
                     }
-
                 }
 
                 else
                 {
-                    isMoving = false;
+                    moving = false;
                     needsUpdate = false;
                 }
             }
-        }
-        
-        public bool CheckShelf()
-        {
-            if(!(shelf == null))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        public Node GetDestination()
-        {
-            return this.Destination;
         }
 
         public Shelf PopShelf()
@@ -234,14 +246,9 @@ namespace Models {
             return shelf2;
         }
 
-        public bool CheckDropped()
+        public void FlipDropped()
         {
-            return justDropped;
-        }
-
-        public void SetDropped()
-        {
-            justDropped = !(justDropped);
+            _justdropped = !(justdropped);
         }
 
     }

@@ -17,8 +17,9 @@ namespace Models
         private double _ty = 0;
         private double _tz = 0;
         private int inv = 0;
-        private bool full = false;
+        private int _maxinv = 4;
         private bool killme = false;
+        private bool ismoving = false;
 
         public string type { get; }
         public Guid guid { get; }
@@ -29,15 +30,13 @@ namespace Models
         public double rotationY { get { return _rY; } }
         public double rotationZ { get { return _rZ; } }
         public int inventory { get { return inv; } }
-        public bool checkfull { get { return full; } }
-        public int maxinv { get { return 4; } }
+        public int maxinv { get { return _maxinv; } }
 
         public double targetX { get { return _tx; } }
         public double targetY { get { return _ty; } }
         public double targetZ { get { return _tz; } }
-
-        bool isMoving = false;
-        public double speed = 0.20;
+        
+        public double speed = 0.30;
 
         public bool needsUpdate = true;
 
@@ -74,11 +73,9 @@ namespace Models
         }
 
         public virtual bool Update(int tick)
-        {
-            
+        {           
             if (needsUpdate)
             {
-
                 Moving();
                 return true;
             }
@@ -90,25 +87,26 @@ namespace Models
             this._tx = xdes;
             this._ty = ydes;
             this._tz = zdes;
-            isMoving = true;
+            ismoving = true;
             needsUpdate = true;
         }
+
+        /// <summary>
+        /// Deze functie word elke 50 ticks aangeroepen door update.
+        /// Als de is
+        /// </summary>
         public virtual void Moving()
         {
-
-            if (isMoving)
-            {
-                
+            if (ismoving)
+            {               
                 if (!(Convert.ToInt16(x) == Convert.ToInt16(targetX)))
                 {
-                    _x += speed;
-                    
-
+                    _x += speed;                 
                 }
 
                 else
                 {
-                    isMoving = false;
+                    ismoving = false;
                     needsUpdate = false;
                     if(killme)
                     {
@@ -121,17 +119,12 @@ namespace Models
         public void PlusInv()
         {
             inv += 1;
-            if(inventory==maxinv)
-            {
-                full = true;
-            }
         }
 
         public void Kill()
         {
             killme = true;
-            Changedes(60, 0, 0);
-            
+            Changedes(60, 0, 0);           
         }
     }
 }

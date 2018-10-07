@@ -8,69 +8,53 @@ namespace Controllers
 {
     public class Node
     {
-        private int x;
-        private int z;
-        private bool hasShelf=false;
-        private bool isStash = false;
-        private bool isDropoff = false;
+        private int _x;
+        private int _z;        
+        private bool _stash = false;
+        private bool _dropoff = false;
         private Shelf shelf;
-        private bool isTarget = false;
+        private bool _target = false;
+
+        public int x { get { return _x;} }
+        public int z { get { return _z;} }
+        public bool checkshelf { get{ return !(shelf == null); } }
+        public bool stash { get { return (_stash); } }
+        public bool dropoff { get { return (_dropoff); } }
+        public bool target { get { return (_target); } }
 
         public Node (int x, int z)
         {
-            this.x = x;
-            this.z = z;         
-        }
-
-        public int GetX()
-        {
-            return x;
-        }
-        public int GetZ()
-        {
-            return z;
+            this._x = x;
+            this._z = z;        
         }
         
+        /// <summary>
+        /// Voegt een shelf toe aan de node en maakt van de node een stash.
+        /// </summary>
+        /// <param name="shelf"></param>
         public void PushShelf(Shelf shelf)
         {
             this.shelf = shelf;
-            hasShelf = true;
-            isStash = true;
+            _stash = true;
         }
+        /// <summary>
+        /// Maakt shelf null, zet target uit en returned de shelf zodat hij aan de robot toegevoegd kan worden.
+        /// </summary>
+        /// <returns></returns>
         public Shelf PopShelf()
         {
             Shelf shelf2 = shelf;
-            hasShelf = false;
-            shelf = null;
-            isTarget = false;
+            _target = false;
+            shelf = null;            
             return shelf2;
         }
         public void SetDropoff()
         {
-            isDropoff = true;
+            _dropoff = true;
         }
-
-
-        public bool CheckDropoff()
+        public void FlipTarget()
         {
-            return isDropoff;
-        }
-        public bool CheckShelf()
-        {
-            return hasShelf;
-        }
-        public bool CheckStash()
-        {
-            return isStash;
-        }
-
-        public bool CheckTarget()
-        {
-            return isTarget;
-        }
-        public void SetTarget()
-        {
-            isTarget = !(isTarget);
+            _target = !(_target);
         }
 
     }

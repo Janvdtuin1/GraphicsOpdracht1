@@ -98,7 +98,7 @@ namespace Models {
             Robot a = CreateRobot(A);
             Robot b = CreateRobot(G);
             Robot c = CreateRobot(H);
-            //a.Changeroute(g.Shortest_path(a.GetDestination(), GetShelfLocation(0)));
+            c.Changespeed(0.5);
             OphaalTruck();
 
 
@@ -108,7 +108,13 @@ namespace Models {
         }
 
 
-
+        /// <summary>
+        /// Maakt een object r met als start positie de meegegeven node.
+        /// Voegt deze vervolgens toe aan de lijsten worldobjects en robots.
+        /// Returned deze robot.
+        /// </summary>
+        /// <param name="start"></param>
+        /// <returns>r</returns>
         private Robot CreateRobot(Node start) {
             Robot r = new Robot(start);
             worldObjects.Add(r);
@@ -116,6 +122,12 @@ namespace Models {
             return r;
         }
 
+        /// <summary>
+        /// Maakt een Node op de gegeven coords, voegt deze toe aan de lijst nodes en returned vervolgens de Node.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="z"></param>
+        /// <returns></returns>
         private Node CreateNode(int x, int z)
         {
             Node n = new Node(x, z);
@@ -123,45 +135,44 @@ namespace Models {
             return n;
         }
 
+        /// <summary>
+        /// Maakt een truck binnen de al eerder gedclareerde variabele t, voegt deze toe aan worldobjects en returned t daarna.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        /// <returns></returns>
         private Truck CreateTruck(double x, double y, double z)
         {
-            Truck t = new Truck(x, y, z, 0, 0, 0);
+            t = new Truck(x, y, z, 0, 0, 0);
             worldObjects.Add(t);
             return t;
-        }
+        }      
 
-        private void OphaalTruck()
+        /// <summary>
+        /// Maakt een shelf op de gegeven coords, voegt de shelf toe aan worldobjects en returned vervolgens de shelf.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        /// <returns></returns>
+        private Shelf CreateShelf(double x, double y, double z)
         {
-            //Truck trucklolxdkekhaha=CreateTruck(0, 0, 0);
-            //trucklolxdkekhaha.Move(-30, 0, 33);
-            //trucklolxdkekhaha.Changedes(25, 0, 0);
-            OphaalEvent = true;
-            GoalInv = 0;
-            t = CreateTruck(-30, 0, 33);
-            t.Changedes(25, 0, 33);
-            foreach(Robot r in robots)
-            {
-                TakeShelfToDropoff(r);
-            }
+            Shelf s = new Shelf(x, y, z);
+            worldObjects.Add(s);
+            return s;
         }
 
-        public void TakeShelfToDropoff(Robot r)
-        {
-            if (!(r.CheckShelf()))
-            {
-                Node n = GetShelfLocation(0);
-                r.Changeroute(g.Shortest_path(r.GetDestination(), n));
-                r.Queueroute(g.Shortest_path(n, GetDropoffLocation(0)));
-            }
-
-            
-        }
-
+        /// <summary>
+        /// Zoekt recursief door de lijst nodes om een node te vinden en returnen waar robots shelves neer mogen zetten. 
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
         private Node GetDropoffLocation(int e)
         {
             int i = e;
             Node n = nodes[i];
-            if(n.CheckDropoff())
+            if(n.dropoff)
             {
                 return n;
             }
@@ -171,13 +182,18 @@ namespace Models {
             }
         }
 
+        /// <summary>
+        /// Zoekt recursief door de lijst nodes om een node te vinden en returnen waar robots shelves kunnen ophalen. 
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
         private Node GetShelfLocation(int e)
         {
             int i = e;
             Node n = nodes[i];
-            if (n.CheckShelf() && !(n.CheckTarget()))
+            if (n.checkshelf && !(n.target))
             {
-                n.SetTarget();
+                n.FlipTarget();
                 GoalInv += 1;
                 return n;
             }
@@ -187,13 +203,30 @@ namespace Models {
             }
         }
 
-        private Shelf CreateShelf(double x, double y, double z)
+        /// <summary>
+        /// Stuurt de meegegeven robot naar een node met een shelf en zet alvast de route naar de dropoff node in de robots queue.
+        /// </summary>
+        /// <param name="r"></param>
+        public void TakeShelfToDropoff(Robot r)
         {
-            Shelf s = new Shelf(x, y, z);
-            worldObjects.Add(s);
-            return s;
+                Node n = GetShelfLocation(0);
+                r.Changeroute(g.Shortest_path(r.destination, n));
+                r.Queueroute(g.Shortest_path(n, GetDropoffLocation(0)));
+        }
 
-
+        /// <summary>
+        /// Start het ophaaltruck event. De bijbehorende variabelen worden goedgezet en alle robots worden naar de TakeShelfToDropoff functie gestuurd.
+        /// </summary>
+        private void OphaalTruck()
+        {
+            OphaalEvent = true;
+            GoalInv = 0;
+            t = CreateTruck(-30, 0, 33);
+            t.Changedes(25, 0, 33);
+            foreach (Robot r in robots)
+            {
+                TakeShelfToDropoff(r);
+            }
         }
 
         public IDisposable Subscribe(IObserver<Command> observer)
@@ -220,18 +253,22 @@ namespace Models {
             
         }
         
+        /// <summary>
+        /// De update functie word elke vijftig ticks uitgevoerd. Deze functie voert code van huidige events uit en zorgt ervoor dat de visuele representaties van de worldobjects 
+        /// geedit kan worden.
+        /// </summary>
+        /// <param name="tick"></param>
+        /// <returns></returns>
         public bool Update(int tick)
         {
             
             if (OphaalEvent)
-            {
-                
+            {                
                 foreach (Robot r in robots)
                 {
-                    if (r.justDropped)
-                    {
-                        
-                        r.SetDropped();
+                    if (r.justdropped)
+                    {                       
+                        r.FlipDropped();
                         t.PlusInv();                       
                         if (!(GoalInv >= t.maxinv))
                         {
@@ -239,20 +276,15 @@ namespace Models {
                             
                         }
                         
-                        if(t.checkfull)
+                        if(t.inventory>=t.maxinv)
                         {
                             t.Kill();
                             OphaalEvent = false;
                             
                         }
-
-
                     }
                 }
-
-
             }
-
 
             for (int i = 0; i < worldObjects.Count; i++) {
                 Object u = worldObjects[i];
@@ -263,9 +295,7 @@ namespace Models {
                         SendCommandToObservers(new UpdateModel3DCommand(u));
                     }
                 }
-            } 
-            
-            
+            }                        
             return true;
         }
     }

@@ -8,11 +8,8 @@ using Controllers;
 namespace Models
 {
     public class Graph
-    {
-
-        //private Dictionary<string, Dictionary<string, int>> vertices = new Dictionary<string, Dictionary<string, int>>();
+    {        
         private Dictionary<Node, Dictionary<Node, int>> vertices = new Dictionary<Node, Dictionary<Node, int>>();
-
         
         public void Add_vertex(Node a, Dictionary<Node, int> edges)
         {
@@ -24,6 +21,7 @@ namespace Models
             var previous = new Dictionary<Node, Node>();
             var distances = new Dictionary<Node, int>();
             var nodes = new List<Node>();
+
 
             List<Node> path = null;
 

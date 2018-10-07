@@ -46,8 +46,6 @@ namespace Models
             needsUpdate = true;
         }
 
-
-
         public virtual bool Update(int tick)
         {
             if (needsUpdate)
