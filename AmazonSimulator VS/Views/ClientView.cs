@@ -45,6 +45,8 @@ namespace Views {
 
         public void SendCommand(Command c) {
             SendMessage(c.ToJson());
+            Console.WriteLine(c);
+            
         }
 
         public void OnCompleted()
