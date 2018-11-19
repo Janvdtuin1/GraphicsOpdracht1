@@ -23,6 +23,11 @@ namespace Models {
         public bool checkshelf { get { return (!(shelf == null)); } }
         public Node destination { get { return _destination; } }
 
+        public virtual void Flipbusy() { _busy = !(_busy); }
+        public void Changespeed(double speed) { this.speed = speed; }
+        public void FlipDropped() { _justdropped = !(justdropped); }
+        public void PushShelf(Shelf shelf) { this.shelf = shelf; }
+
         public Robot(Node start) {
             this._type = "robot";
             this._guid = Guid.NewGuid();
@@ -33,22 +38,6 @@ namespace Models {
             this._destination = start;
 
         }
-
-        public virtual void Flipbusy()
-        {
-            _busy = !(_busy);
-        }
-
-        public void Changespeed(double speed)
-        {
-            this.speed = speed;
-        }
-
-        public bool CheckMove()
-        {
-            return (moving);
-        }
-
 
         /// <summary>
         /// De update functie word elke vijftig ticks uitgevoerd. De update functie voert verschillende functies uit die vaak geupdate moeten worden en returned daarna true om te laten zien dat hij alles geupdate heeft.
@@ -61,7 +50,10 @@ namespace Models {
                 Moving();
                 ShelfInteractie();
                 Route();
-                MoveShelf();               
+                if (checkshelf)
+                {
+                    shelf.Move(_x, (_y + 2.3), _z);
+                }
                 if (!(_queueroute==null))
                 {
                     Queueroute(_queueroute);
@@ -69,17 +61,6 @@ namespace Models {
                 return true;
             }
             return false;
-        }
-
-        /// <summary>
-        /// Verplaatst het shelf object in deze robot telkens naar iets boven de robot zijn positie.
-        /// </summary>
-        public virtual void MoveShelf()
-        {
-            if(checkshelf)
-            {
-                shelf.Move(_x, (_y + 2.3), _z);
-            }
         }
 
         //Verandert de huidige route variabele.
@@ -102,6 +83,28 @@ namespace Models {
                 Changeroute(route);
                 this._queueroute = null;
             }
+        }
+       
+        /// <summary>
+        /// Als de robot onroute is en stilstaat word de destination verandert naar de volgende node in de route lijst.
+        /// </summary>z
+        public virtual void Route()
+        {            
+            if (onroute)
+            {
+                if(!moving)
+                {
+                    _destination = _route.Last();
+                        Changedes(_destination.x, 0, _destination.z);
+                        _route.RemoveAt(_route.Count()-1);
+                    if(_route.Count()==0)
+                    {
+                        onroute = false;
+                    }
+
+                }
+            }
+
         }
 
         /// <summary>
@@ -127,11 +130,11 @@ namespace Models {
                 if (!(onroute))
                 {
 
-                    if(_destination.stash)
+                    if (_destination.stash)
                     {
 
-                        if(!(_destination.checkshelf))
-                        {                           
+                        if (!(_destination.checkshelf))
+                        {
                             _destination.PushShelf(PopShelf());
                             Flipbusy();
                         }
@@ -141,35 +144,9 @@ namespace Models {
                             PushShelf(_destination.PopShelf());
 
                         }
-
-
                     }
-                    
                 }
             }
-        }
-
-        /// <summary>
-        /// Als de robot onroute is en stilstaat word de destination verandert naar de volgende node in de route lijst.
-        /// </summary>z
-        public virtual void Route()
-        {            
-            if (onroute)
-            {
-                if(!moving)
-                {
-                    _destination = _route.Last();
-                        Changedes(_destination.x, 0, _destination.z);
-                        _route.RemoveAt(_route.Count()-1);
-                    if(_route.Count()==0)
-                    {
-
-                        onroute = false;
-                    }
-
-                }
-            }
-
         }
 
         public Shelf PopShelf()
@@ -178,16 +155,5 @@ namespace Models {
             shelf = null;
             return shelf2;
         }
-        
-        public void PushShelf(Shelf shelf)
-        {
-            this.shelf = shelf;
-        }
-
-        public void FlipDropped()
-        {
-            _justdropped = !(justdropped);
-        }
-
     }
 }
