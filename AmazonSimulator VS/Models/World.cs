@@ -139,7 +139,7 @@ namespace Models {
         /// <returns></returns>
         private Truck CreateTruck(double x, double y, double z)
         {
-            t = new Truck(x, y, z, 0, 0, 0);
+            t = new Truck(x, y, z);
             worldObjects.Add(t);
             return t;
         }      
